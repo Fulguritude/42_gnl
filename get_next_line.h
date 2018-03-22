@@ -6,7 +6,7 @@
 /*   By: tduquesn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/06 18:07:23 by tduquesn          #+#    #+#             */
-/*   Updated: 2017/12/22 04:53:54 by tduquesn         ###   ########.fr       */
+/*   Updated: 2018/03/01 19:52:52 by tduquesn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,17 @@
 
 # include "libft/hdr/libft.h"
 
-# define BUFF_SIZE 32
+/*
+** Note that read()'s behavior at EOF is to not change the buffer and return 0.
+** The last char read is not EOF but the last char itself. Say we have a buffer
+** filled with 1s, and read is called with rdlen < bufsize. Then there won't
+** even be a '\0' to separate what has just been read from the 1s.
+**
+** Also, as long as read() returns something else than 0, even if it is a
+** single '\n', it must return NWL_RD, even if the return string is empty.
+*/
+
+# define BUFF_SIZE 16
 # define NWL_RD 1
 # define EOF_RD 0
 # define ERR_RD -1
@@ -35,7 +45,6 @@ typedef struct		s_fd_info
 	int			rdlen;
 	char		buf[BUFF_SIZE + 1];
 	size_t		bufoffset;
-
 }					t_fd_info;
 
 int					get_next_line(int const fd, char **line);

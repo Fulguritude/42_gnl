@@ -6,7 +6,7 @@
 /*   By: tduquesn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/12 14:40:28 by tduquesn          #+#    #+#             */
-/*   Updated: 2017/12/22 05:44:07 by tduquesn         ###   ########.fr       */
+/*   Updated: 2018/03/01 19:37:23 by tduquesn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int			bnl_part(t_fd_info *fdi, char **line, char **str)
 		else if (fdi->rdlen == 0 && !*line)
 		{
 			if (*line)
-				free(*line);
+				ft_strdel(line);
 			return (EOF_RD);
 		}
 		else if (fdi->rdlen == 0 && *line)
@@ -54,6 +54,8 @@ static int			bnl_part(t_fd_info *fdi, char **line, char **str)
 		return (ERR_RD);
 	fdi->bufoffset += ft_strlen(*str);
 	*line = ft_strappend(line, *str);
+	if (fdi->rdlen == 1 && BUFF_SIZE != 1 && fdi->buf[0] == '\n')
+		return (NWL_RD);
 	return (2);
 }
 
@@ -100,7 +102,6 @@ int					get_next_line(int const fd, char **line)
 	tmp_elem = fd_info_lst;
 	i = 0;
 	if (status == EOF_RD)
-	{
 		while (tmp_elem)
 		{
 			if (((t_fd_info*)(tmp_elem->content))->fd == fdi->fd)
@@ -111,6 +112,5 @@ int					get_next_line(int const fd, char **line)
 			++i;
 			tmp_elem = tmp_elem->next;
 		}
-	}
 	return (status);
 }
